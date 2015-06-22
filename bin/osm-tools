@@ -1,0 +1,77 @@
+#! /usr/bin/env lua
+
+local unpack = table.unpack or unpack
+
+local HELP =
+[[
+%s <command> <args...>
+Do things to osm data.
+Possible commands are:
+]]
+
+local function list_commands(C)
+  for k in pairs(C) do io.stderr:write("  ", k, "\n") end
+end
+
+local COMMANDS
+
+COMMANDS =
+{
+  help =
+  {
+    help =
+[[
+%s %s [command]
+display all possible commands or help for a given command.
+]],
+    doit = function(command)
+        if command then
+          command = command:lower()
+          if COMMANDS[command] then
+            io.stderr:write(COMMANDS[command].help:format(arg[0], command))
+          else
+            io.stderr:write("Unknown command, possible commands are:\n")
+            list_commands(COMMANDS)
+          end
+        else
+          io.stderr:write(HELP:format(arg[0]))
+          list_commands(COMMANDS)
+        end
+        return true
+      end
+  },
+
+  import =
+  {
+    help =
+[[
+%s %s <osm-file-name> <db-name>
+Import an osm file to an osm database verbatim.  The database is created.
+]],
+    doit = function(osmfile, dbfile)
+      if not osmfile or not dbfile then
+        return nil, "missing argument"
+      end
+      local osm_to_db = require"osm-to-db"
+      local ok, message = pcall(osm_to_db.import, osmfile, dbfile)
+      return ok, message
+    end
+  },
+}
+
+
+local command = COMMANDS[(arg[1] or "help"):lower()]
+if not command then
+  io.stderr:write(("Unknown command '%s'.\n\n"):format(arg[1]))
+  COMMANDS.help.doit()
+  os.exit(1)
+end
+
+local ok, message = command.doit(unpack(arg, 2))
+if not ok then
+  io.stderr:write("Error: ", message, "\n\n")
+  COMMANDS.help.doit(arg[1])
+  os.exit(1)
+else
+  os.exit()
+end
