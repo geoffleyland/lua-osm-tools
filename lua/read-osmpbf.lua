@@ -34,11 +34,15 @@ end
 
 local function id_field(msg) return msg.id end
 local function version_field(msg) return msg.info and msg.info.version or nil end
-local function timestamp_field(msg) return msg.info and msg.info.timestamp or nil end
 local function changeset_field(msg) return msg.info and msg.info.changeset or nil end
 local function uid_field(msg) return msg.info and msg.info.uid or nil end
 local function user_field(msg, block)
   return msg.info and msg.info.user_sid and block.stringtable.s[msg.info.user_sid+1] or nil
+end
+-- We copy readosm and return a timestamp string.
+-- This avoids complications with UTC and local time.
+local function timestamp_field(msg)
+  return msg.info and os.date("!%Y-%m-%dT%H:%M:%SZ", msg.info.timestamp) or nil
 end
 
 
@@ -225,7 +229,7 @@ local function read_dense_nodes(block, elements, config)
         latitude = lat,
         longitude = lon,
         version = info and info.version[i],
-        timestamp = timestamp,
+        timestamp = os.date("!%Y-%m-%dT%H:%M:%SZ", timestamp),
         changeset = changset,
         uid = uid,
         user = block.stringtable.s[user_sid+1],

@@ -219,7 +219,7 @@ function osmdb:_insert_element(o, type)
     values.changeset = tonumber(o.changeset)
     values.user = o.user
     values.uid = tonumber(o.uid)
-    values.timestamp = o.timestamp and os.date("%Y-%m-%d %H:%M:%S", o.timestamp)
+    values.timestamp = o.timestamp and o.timestamp
     self.Q.insert_info:exec(values)
   end
 
