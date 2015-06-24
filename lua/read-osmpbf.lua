@@ -163,6 +163,7 @@ local function read_dense_nodes(block, elements, config)
   local lat, lon = block.lat_offset * 1e-9, block.lon_offset * 1e-9
   local dense = elements.dense
   local granularity = block.granularity * 1e-9
+  local date_granularity = block.date_granularity * 1e-3
   local keys_vals = dense.keys_vals
   local next_string_index = 1
 
@@ -229,8 +230,8 @@ local function read_dense_nodes(block, elements, config)
         latitude = lat,
         longitude = lon,
         version = info and info.version[i],
-        timestamp = os.date("!%Y-%m-%dT%H:%M:%SZ", timestamp),
-        changeset = changset,
+        timestamp = os.date("!%Y-%m-%dT%H:%M:%SZ", timestamp * date_granularity),
+        changeset = changeset,
         uid = uid,
         user = block.stringtable.s[user_sid+1],
         [MESSAGE_KEY] = tag_info,
