@@ -113,7 +113,7 @@ local relation_fields =
         {
           id    = id,
           role  = block.stringtable.s[msg.roles_sid[i]+1],
-          type  = msg.types[i]:lower()
+          member_type  = msg.types[i]:lower()
         }
       end
       return m

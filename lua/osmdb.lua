@@ -256,8 +256,8 @@ function osmdb:insert_relation(o)
   for i, n in ipairs(o.member_refs) do
     values.ord = i
     values.role = n.role
-    values.type = n.type
-    values.member_id = tonumber(n.eid) * 4 + type_code[n.type]
+    values.type = n.member_type
+    values.member_eid = tonumber(n.id) * 4 + type_code[n.member_type]
     self.Q.insert_member:exec(values)
   end
 end
