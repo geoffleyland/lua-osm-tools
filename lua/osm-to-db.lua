@@ -35,10 +35,10 @@ local function import(osmname, db_or_dbname)
   db:begin()
 
   local ro = (function()
-      if osmname:match(".xml$") then
-        return assert(cro, "You need to install lua-readosm to read XML-format OSM files")
-      else
+      if osmname:match(".pbf$") then
         return assert(lro or cro, "You need to install read-osmpbf or lua-readosm to read PBF OSM files")
+      else
+        return assert(cro, "You need to install lua-readosm to read XML-format OSM files")
       end
     end)()
 
