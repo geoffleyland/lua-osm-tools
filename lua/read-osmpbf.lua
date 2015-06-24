@@ -184,8 +184,8 @@ local function read_dense_nodes(block, elements, config)
   if not (config.info and dense.denseinfo) then
     for i, v in ipairs(dense.id) do
       id = id + v
-      lat = lat + dense.lat[i] * granularity
-      lon = lon + dense.lon[i] * granularity
+      lat = lat + dense.lat[i]
+      lon = lon + dense.lon[i]
       if keys_vals then
         tag_info.string_index = next_string_index
         while true do
@@ -198,8 +198,8 @@ local function read_dense_nodes(block, elements, config)
       local n =
       {
         id = id,
-        latitude = lat,
-        longitude = lon,
+        latitude = lat * granularity,
+        longitude = lon * granularity,
         [MESSAGE_KEY] = tag_info,
       }
       coroutine.yield("node", setmetatable(n, dense_mt))
@@ -209,8 +209,8 @@ local function read_dense_nodes(block, elements, config)
     local timestamp, changeset, uid, user_sid = 0, 0, 0, 0
     for i, v in ipairs(dense.id) do
       id = id + v
-      lat = lat + dense.lat[i] * granularity
-      lon = lon + dense.lon[i] * granularity
+      lat = lat + dense.lat[i]
+      lon = lon + dense.lon[i]
       if keys_vals then
         tag_info.string_index = next_string_index
         while true do
@@ -227,8 +227,8 @@ local function read_dense_nodes(block, elements, config)
       local n =
       {
         id = id,
-        latitude = lat,
-        longitude = lon,
+        latitude = lat * granularity,
+        longitude = lon * granularity,
         version = info and info.version[i],
         timestamp = os.date("!%Y-%m-%dT%H:%M:%SZ", timestamp * date_granularity),
         changeset = changeset,
