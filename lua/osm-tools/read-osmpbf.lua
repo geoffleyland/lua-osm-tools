@@ -1,6 +1,6 @@
-local pb = require"pb"
-local osmpbf = require"protocol-buffer-defs.osm"
 local zlib = require"zlib"
+local pb = require"pb"
+local osmpbf = require"osm-tools.protocol-buffer-defs.osm"
 
 
 ------------------------------------------------------------------------------

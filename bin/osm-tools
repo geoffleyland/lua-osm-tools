@@ -52,7 +52,7 @@ Import an osm file to an osm database verbatim.  The database is created.
       if not osmfile or not dbfile then
         return nil, "missing argument"
       end
-      local osm_to_db = require"osm-to-db"
+      local osm_to_db = require"osm-tools.osm-to-db"
       local ok, message = pcall(osm_to_db.import, osmfile, dbfile)
       return ok, message
     end

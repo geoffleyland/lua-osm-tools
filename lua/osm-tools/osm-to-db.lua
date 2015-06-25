@@ -1,8 +1,8 @@
-local ok, lro = pcall(require, "read-osmpbf")
+local ok, lro = pcall(require, "osm-tools.read-osmpbf")
 lro = ok and lro or nil
 local ok, cro = pcall(require, "readosm")
 cro = ok and cro or nil
-local osmdb = require"osmdb"
+local osmdb = require"osm-tools.osmdb"
 
 
 ------------------------------------------------------------------------------
