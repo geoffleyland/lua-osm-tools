@@ -4,14 +4,16 @@ My set of tools for dealing with OSM data and converting it to routable
 road networks.  The tools include:
 
   - osmdb: a format for storing OSM data pretty much verbatim in a database.
-    xml and pbf are a pretty horrible formats to work with so the first thing
+    xml and pbf are a awkward formats to work with so the first thing
     I do tends to be read it all into a sqlite db.
 
   - readosm-pbf: a library for reading osm pbf files (not xml).
-    Because it gives LuaJIT a few more opportunities to compile traces it ends
-    up quicker than [my binding](https://github.com/geoffleyland/lua-readosm)
+    This is a bit of an experiment:
+    because it gives LuaJIT a few more opportunities to compile traces it ends
+    up about the same speed as [my binding](https://github.com/geoffleyland/lua-readosm)
     to [readosm](https://www.gaia-gis.it/fossil/readosm/index),
-    even though readosm is quicker if you're using it from C.
+    even though readosm is *much* quicker if you're using it from C.
+    The tools here will work with either readosm-pbf or lua-readosm.
 
   - osm-tools: a tool with subcommands to:
 
@@ -21,9 +23,10 @@ road networks.  The tools include:
 # osmdb
 
 osmdb is a simple db format for storing osm data.
-I'm sure this must exist, right?
-Anyway, it's not a geographic database or anything like that - it's just
-a fairly literal copy of the data.
+I'm sure this must already exist, right?
+
+In any case, it's not a geographic database
+- it's just a literal copy of the data in an OSM XML or PBF file.
 It's not really intended for you to add to the database once you've read it -
 it's more of a import-the-whole-map-once-then-read-it kind of database.
 
@@ -77,3 +80,13 @@ Otherwise:
 
 This format is intended to be exactly the same as what you get from the OSM
 readers.
+
+*Note* that the ids stored in the database are NOT THE SAME as OSM ids.
+OSM node, way and relation ids are *nearly*, but not actually, unique
+over the nodes, ways and relations.
+It's kind of a shame that they aren't.
+Since there are three types of OSM objects,
+the eids stored in this osmdb format are 4 * osm_id + type_code, where
+type_code is 0, 1 or 2 for nodes, ways and relations respectively.
+
+The objects returned from `db:elements` have both an id and an eid member.
