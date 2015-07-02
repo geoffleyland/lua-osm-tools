@@ -57,6 +57,33 @@ Import an osm file to an osm database verbatim.  The database is created.
       return ok, message
     end
   },
+
+  transform =
+  {
+    help =
+[[
+%s %s <osm-file-name> <db-name> <transform>
+Import an osm file to an osm database while filtering and transforming the data.
+]],
+    doit = function(osmfile, dbfile, transform_name)
+      if not osmfile or not dbfile then
+        return nil, "missing argument"
+      end
+      local transform = require"osm-tools.transform"
+
+      local filter = (function()
+          if transform_name:match("%.") then
+            return require(transform_name)
+          else
+            return require("osm-tools.network-profiles."..transform_name)
+          end
+        end)()
+
+      local ok, message = pcall(transform.transform, osmfile, dbfile, filter)
+      return ok, message
+    end
+  },
+
 }
 
 
